@@ -6,18 +6,22 @@ import { AuthenticatedAppContext } from "../types/AppContext";
 @Resolver(Post)
 export class PostResolver {
   @Mutation(() => Post)
-  @Authorized()
+  // @Authorized()
   async createPost(
     @Arg("input", () => PostInput) input: PostInput,
-    @Ctx() { userId }: AuthenticatedAppContext
+    // @Ctx() { userId }: AuthenticatedAppContext
   ): Promise<Post> {
-    const { title, description, likes, comments } = input;
+    const userId = "6367ced01c20af8a758835db"
+    const { title, description,tags, likes, comments,picUrl } = input;
+    console.log("imput",input)
     try {
       const creatorId = userId;
       const post = await postModel.create({
         title,
         description,
+        tags,
         likes,
+        picUrl,
         comments,
         creatorId,
       });

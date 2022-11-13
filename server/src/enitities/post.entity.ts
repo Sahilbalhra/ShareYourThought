@@ -6,7 +6,9 @@ export interface IPost {
   _id: string;
   creatorId: string;
   title: string;
+  tags?: string[];
   description: string;
+  picUrl: string;
   likes?: string[];
   comments?: string[];
   createdAt: Date;
@@ -18,6 +20,9 @@ export class Post implements IPost {
   @Field() _id!: string;
   @Field() creatorId: string;
   @Field() title!: string;
+  @Field(() => [String], { nullable: true }) tags?: string[];
+
+  @Field() picUrl!: string;
   @Field() description!: string;
   @Field(() => [String], { nullable: true }) likes?: string[];
   @Field(() => [String], { nullable: true }) comments?: string[];
@@ -42,6 +47,15 @@ export const postSchema = new Schema(
       required: true,
     },
     description: {
+      type: String,
+      required: true,
+    },
+    tags: {
+      type: [String],
+      required: false,
+      default: [],
+    },
+    picUrl: {
       type: String,
       required: true,
     },

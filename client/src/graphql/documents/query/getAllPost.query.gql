@@ -1,0 +1,19 @@
+query GetAllPost {
+  getAllPost {
+    _id
+    creatorId
+    title
+    tags
+    picUrl
+    description
+    likes
+    comments
+    createdAt
+    updatedAt
+    User {
+      _id
+      name
+      email
+    }
+  }
+}

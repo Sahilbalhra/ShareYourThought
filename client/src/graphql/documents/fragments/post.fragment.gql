@@ -1,0 +1,12 @@
+fragment Post on Post {
+  _id
+  creatorId
+  title
+  tags
+  picUrl
+  description
+  likes
+  comments
+  createdAt
+  updatedAt
+}

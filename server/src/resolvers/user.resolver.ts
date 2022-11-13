@@ -20,13 +20,16 @@ export class UserResolver {
   async signUpUser(
     @Arg("input", () => UserInput) input: UserInput
   ): Promise<User> {
-    const { name, email, password } = input;
+    const { firstName, lastName, email, password } = input;
+    console.log("input", input);
     try {
+      console.log("user input", input);
       const existingUser = await UserModel.findOne({ email });
       if (existingUser) {
         throw new Error("User with this email already exists");
       }
       const hashPassword = await bcrypt.hash(password, 12);
+      const name = firstName + " " + lastName;
       const user = await UserModel.create({
         name,
         email,
