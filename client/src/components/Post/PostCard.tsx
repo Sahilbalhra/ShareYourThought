@@ -17,6 +17,7 @@ import {
   useDeletePostMutation,
   useLikePostMutation,
 } from "../../graphql/generated";
+import { useNavigate } from "react-router-dom";
 export type PostProps = {
   id: string;
   title: string;
@@ -36,6 +37,7 @@ const PostCard: React.FC<PostProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const toast = useToast();
+  const navigate = useNavigate();
   const [deletePost, { loading, error }] = useDeletePostMutation();
   const [likePost, { data: likeData }] = useLikePostMutation();
   console.log("Data for like:", likeData);
@@ -93,7 +95,14 @@ const PostCard: React.FC<PostProps> = ({
       overflow='hidden'
       position='relative'
     >
-      <Image src={picUrl} alt={title} h='120px' w='240px' />
+      <Image
+        src={picUrl}
+        alt={title}
+        h='120px'
+        w='240px'
+        onClick={() => navigate(`/${id}`)}
+        cursor="pointer"
+      />
       <IconButton
         aria-label={""}
         variant='ghost'

@@ -16,6 +16,11 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type CommentPostInput = {
+  comment: Scalars['String'];
+  id: Scalars['String'];
+};
+
 export type ExtendedPost = {
   __typename?: 'ExtendedPost';
   User: User;
@@ -33,12 +38,18 @@ export type ExtendedPost = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  commentPost: Scalars['String'];
   createPost: Post;
   deletePost: Scalars['String'];
   likePost: Scalars['String'];
   signInUser: SignInUserResponse;
   signUpUser: User;
   updatePost: Scalars['String'];
+};
+
+
+export type MutationCommentPostArgs = {
+  input: CommentPostInput;
 };
 
 
@@ -150,6 +161,13 @@ export type PostFragment = { __typename?: 'Post', _id: string, creatorId: string
 
 export type UserFragment = { __typename?: 'User', _id: string, name: string, email: string };
 
+export type CommentPostMutationVariables = Exact<{
+  input: CommentPostInput;
+}>;
+
+
+export type CommentPostMutation = { __typename?: 'Mutation', commentPost: string };
+
 export type CreatePostMutationVariables = Exact<{
   input: PostInput;
 }>;
@@ -230,6 +248,37 @@ export const UserFragmentDoc = gql`
   email
 }
     `;
+export const CommentPostDocument = gql`
+    mutation CommentPost($input: CommentPostInput!) {
+  commentPost(input: $input)
+}
+    `;
+export type CommentPostMutationFn = Apollo.MutationFunction<CommentPostMutation, CommentPostMutationVariables>;
+
+/**
+ * __useCommentPostMutation__
+ *
+ * To run a mutation, you first call `useCommentPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCommentPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [commentPostMutation, { data, loading, error }] = useCommentPostMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCommentPostMutation(baseOptions?: Apollo.MutationHookOptions<CommentPostMutation, CommentPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CommentPostMutation, CommentPostMutationVariables>(CommentPostDocument, options);
+      }
+export type CommentPostMutationHookResult = ReturnType<typeof useCommentPostMutation>;
+export type CommentPostMutationResult = Apollo.MutationResult<CommentPostMutation>;
+export type CommentPostMutationOptions = Apollo.BaseMutationOptions<CommentPostMutation, CommentPostMutationVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($input: PostInput!) {
   createPost(input: $input) {

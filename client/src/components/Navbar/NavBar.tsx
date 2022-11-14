@@ -39,7 +39,9 @@ const NavBar: React.FC = () => {
       boxShadow='md'
     >
       <Box>
-        <Text as='b'>Share Your Thought</Text>
+        <Text as='b' onClick={() => navigate("/")} cursor='pointer'>
+          Share Your Journey
+        </Text>
       </Box>
       <Box>
         {!token ? (

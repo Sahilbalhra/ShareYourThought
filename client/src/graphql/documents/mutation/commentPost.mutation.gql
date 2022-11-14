@@ -1,0 +1,3 @@
+mutation CommentPost($input: CommentPostInput!) {
+  commentPost(input: $input)
+}

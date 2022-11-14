@@ -1,6 +1,6 @@
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { Post, ExtendedPost, postModel } from "../enitities";
-import { PostInput, UpdatePostInput } from "../inputs";
+import { CommentPostInput, PostInput, UpdatePostInput } from "../inputs";
 import mongoose from "mongoose";
 import { AuthenticatedAppContext } from "../types/AppContext";
 
@@ -150,6 +150,33 @@ export class PostResolver {
         );
         return "Post have been liked";
       }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Mutation(() => String)
+  @Authorized()
+  async commentPost(
+    @Arg("input", () => CommentPostInput) input: CommentPostInput
+    // @Ctx() { userId }: AuthenticatedAppContext
+  ) {
+    const { id, comment } = input;
+    try {
+      const existingPost = await postModel.findById(id);
+      if (!existingPost) {
+        throw new Error("Post does not exist");
+      }
+
+      if (existingPost?.comments) {
+        existingPost?.comments.push(String(comment));
+      }
+      await postModel.findByIdAndUpdate(
+        id,
+        { comments: existingPost?.comments },
+        { new: true }
+      );
+      return "Post have been liked";
     } catch (error) {
       throw error;
     }
