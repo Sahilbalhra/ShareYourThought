@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Box, Input, Text, Textarea, Center } from "@chakra-ui/react";
 import FileBase from "react-file-base64";
 import {
+  GetPostDocument,
   useCreatePostMutation,
   // useGetAllPostQuery,
   useUpdatePostMutation,
@@ -60,9 +61,8 @@ const PostForm: React.FC = () => {
   };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    console.log("Form Date:", formData);
+
     if (form) {
-      console.log("from updATE FUNCTION");
       await updatePost({
         variables: {
           input: {
@@ -73,7 +73,9 @@ const PostForm: React.FC = () => {
             picUrl: formData.picUrl,
           },
         },
-        refetchQueries: [{ query: GetAllPostDocument }],
+        refetchQueries: [
+          { query: GetPostDocument, variables: { id: forms.id } },
+        ],
       });
     } else {
       await createPost({

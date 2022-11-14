@@ -1,0 +1,14 @@
+mutation SearchPost($search: String!) {
+  searchPost(search: $search) {
+    _id
+    creatorId
+    title
+    tags
+    picUrl
+    description
+    likes
+    comments
+    createdAt
+    updatedAt
+  }
+}

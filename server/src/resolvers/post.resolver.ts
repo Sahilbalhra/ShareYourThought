@@ -125,7 +125,7 @@ export class PostResolver {
   async likePost(
     @Arg("id", () => String) id: String,
     @Ctx() { userId }: AuthenticatedAppContext
-  ) {
+  ): Promise<String> {
     try {
       const existingPost = await postModel.findById(id);
       if (!existingPost) {
@@ -160,7 +160,7 @@ export class PostResolver {
   async commentPost(
     @Arg("input", () => CommentPostInput) input: CommentPostInput
     // @Ctx() { userId }: AuthenticatedAppContext
-  ) {
+  ): Promise<String> {
     const { id, comment } = input;
     try {
       const existingPost = await postModel.findById(id);
@@ -177,6 +177,24 @@ export class PostResolver {
         { new: true }
       );
       return "Post have been liked";
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Mutation(() => [Post])
+  @Authorized()
+  async searchPost(
+    @Arg("search", () => String) search: String
+  ): Promise<Post[]> {
+    try {
+      const posts = await postModel.find({
+        title: search,
+      });
+      if (!posts) {
+        throw new Error("No post found!");
+      }
+      return posts;
     } catch (error) {
       throw error;
     }

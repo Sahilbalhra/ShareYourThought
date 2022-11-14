@@ -16,16 +16,8 @@ import { logOutUser } from "../../features/auth/authSlice";
 const NavBar: React.FC = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  console.log(token);
   const dispatch = useAppDispatch();
   const { data } = useGetUserQuery();
-  // if (error) {
-  //   console.log("Authorized User Error:", data);
-  // }
-  // if (data) {
-  //   console.log("Authorized User:", data);
-  // }
-
   return (
     <Box
       minW='2xl'

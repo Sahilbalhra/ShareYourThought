@@ -42,6 +42,7 @@ export type Mutation = {
   createPost: Post;
   deletePost: Scalars['String'];
   likePost: Scalars['String'];
+  searchPost: Array<Post>;
   signInUser: SignInUserResponse;
   signUpUser: User;
   updatePost: Scalars['String'];
@@ -65,6 +66,11 @@ export type MutationDeletePostArgs = {
 
 export type MutationLikePostArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationSearchPostArgs = {
+  search: Scalars['String'];
 };
 
 
@@ -188,6 +194,13 @@ export type LikePostMutationVariables = Exact<{
 
 
 export type LikePostMutation = { __typename?: 'Mutation', likePost: string };
+
+export type SearchPostMutationVariables = Exact<{
+  search: Scalars['String'];
+}>;
+
+
+export type SearchPostMutation = { __typename?: 'Mutation', searchPost: Array<{ __typename?: 'Post', _id: string, creatorId: string, title: string, tags?: Array<string> | null, picUrl: string, description: string, likes?: Array<string> | null, comments?: Array<string> | null, createdAt: any, updatedAt: any }> };
 
 export type SignInUserMutationVariables = Exact<{
   input: SignInUserInput;
@@ -374,6 +387,48 @@ export function useLikePostMutation(baseOptions?: Apollo.MutationHookOptions<Lik
 export type LikePostMutationHookResult = ReturnType<typeof useLikePostMutation>;
 export type LikePostMutationResult = Apollo.MutationResult<LikePostMutation>;
 export type LikePostMutationOptions = Apollo.BaseMutationOptions<LikePostMutation, LikePostMutationVariables>;
+export const SearchPostDocument = gql`
+    mutation SearchPost($search: String!) {
+  searchPost(search: $search) {
+    _id
+    creatorId
+    title
+    tags
+    picUrl
+    description
+    likes
+    comments
+    createdAt
+    updatedAt
+  }
+}
+    `;
+export type SearchPostMutationFn = Apollo.MutationFunction<SearchPostMutation, SearchPostMutationVariables>;
+
+/**
+ * __useSearchPostMutation__
+ *
+ * To run a mutation, you first call `useSearchPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSearchPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [searchPostMutation, { data, loading, error }] = useSearchPostMutation({
+ *   variables: {
+ *      search: // value for 'search'
+ *   },
+ * });
+ */
+export function useSearchPostMutation(baseOptions?: Apollo.MutationHookOptions<SearchPostMutation, SearchPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SearchPostMutation, SearchPostMutationVariables>(SearchPostDocument, options);
+      }
+export type SearchPostMutationHookResult = ReturnType<typeof useSearchPostMutation>;
+export type SearchPostMutationResult = Apollo.MutationResult<SearchPostMutation>;
+export type SearchPostMutationOptions = Apollo.BaseMutationOptions<SearchPostMutation, SearchPostMutationVariables>;
 export const SignInUserDocument = gql`
     mutation SignInUser($input: signInUserInput!) {
   signInUser(input: $input) {

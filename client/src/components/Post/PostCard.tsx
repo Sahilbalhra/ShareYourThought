@@ -41,7 +41,7 @@ const PostCard: React.FC<PostProps> = ({
   const navigate = useNavigate();
   const [deletePost, { loading, error }] = useDeletePostMutation();
   const [likePost, { data: likeData }] = useLikePostMutation();
-  console.log("Data for like:", likeData);
+  // console.log("Data for like:", likeData);
   const handleDelete = async () => {
     await deletePost({
       variables: {

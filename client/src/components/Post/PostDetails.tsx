@@ -19,6 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import {
+  GetPostDocument,
   useCommentPostMutation,
   useGetPostQuery,
 } from "../../graphql/generated";
@@ -43,6 +44,7 @@ const PostDetail: React.FC = () => {
           comment,
         },
       },
+      refetchQueries: [{ query: GetPostDocument, variables: { id } }],
     });
   };
 

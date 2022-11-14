@@ -60,24 +60,6 @@ const SignInForm: React.FC = () => {
 
       dispatch(logedInUser(data.signInUser.token));
     }
-
-    // if (!error) {
-    //   if (data) localStorage.setItem("token", JSON.stringify(data?.signInUser.token));
-    //   toast({
-    //     title: "User have been Logged In!",
-    //     status: "success",
-    //     duration: 3000,
-    //     isClosable: true,
-    //   });
-    //   navigate("/");
-    // } else {
-    //   toast({
-    //     title: "Something went wrong!",
-    //     status: "error",
-    //     duration: 3000,
-    //     isClosable: true,
-    //   });
-    // }
   };
 
   const formik = useFormik<any>({
