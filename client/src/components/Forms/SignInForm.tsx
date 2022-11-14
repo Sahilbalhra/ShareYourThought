@@ -38,11 +38,8 @@ const SignInForm: React.FC = () => {
   const toast = useToast();
   const handleClick = () => setShow(!show);
 
-  const [logInUser, { data, loading, error }] = useSignInUserMutation();
-  if (data) {
-    console.log("Dtata after login", data);
-    localStorage.setItem("token", data.signInUser.token);
-  }
+  const [logInUser, { data, loading }] = useSignInUserMutation();
+  console.log("data after login button clicked", data?.signInUser.token);
 
   const handleSubmit = async (values: SignInUserMutationVariables["input"]) => {
     await logInUser({
@@ -51,7 +48,8 @@ const SignInForm: React.FC = () => {
       },
     });
 
-    if (!error) {
+    if (data?.signInUser.token) {
+      localStorage.setItem("token", data.signInUser.token);
       toast({
         title: "User have been Logged In!",
         status: "success",
@@ -59,15 +57,27 @@ const SignInForm: React.FC = () => {
         isClosable: true,
       });
       navigate("/");
-      dispatch(logedInUser(data?.signInUser.token));
-    } else {
-      toast({
-        title: "Something went wrong!",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+
+      dispatch(logedInUser(data.signInUser.token));
     }
+
+    // if (!error) {
+    //   if (data) localStorage.setItem("token", JSON.stringify(data?.signInUser.token));
+    //   toast({
+    //     title: "User have been Logged In!",
+    //     status: "success",
+    //     duration: 3000,
+    //     isClosable: true,
+    //   });
+    //   navigate("/");
+    // } else {
+    //   toast({
+    //     title: "Something went wrong!",
+    //     status: "error",
+    //     duration: 3000,
+    //     isClosable: true,
+    //   });
+    // }
   };
 
   const formik = useFormik<any>({

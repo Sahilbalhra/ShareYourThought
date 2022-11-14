@@ -1,4 +1,5 @@
-import { createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+
 // Define a type for the slice state
 
 interface AuthUser {
@@ -7,7 +8,7 @@ interface AuthUser {
 
 // Define the initial state using that type
 const initialState: AuthUser = {
-  token: localStorage.getItem("token"),
+  token: null,
 };
 
 export const authSlice = createSlice({
@@ -17,10 +18,12 @@ export const authSlice = createSlice({
   reducers: {
     logedInUser: (state, action: any) => {
       if (action.payload.token) {
-        localStorage.setItem("token", action.payload.token);
+        console.log("Token in slice: " + action.payload.token);
+        // localStorage.setItem("token", action.payload.token);
+        state.token = localStorage.getItem("token");
       }
     },
-    logOutUser: (state) => {
+    logOutUser: () => {
       localStorage.clear();
     },
   },

@@ -3,6 +3,7 @@ import { Post, ExtendedPost, postModel } from "../enitities";
 import { PostInput, UpdatePostInput } from "../inputs";
 import mongoose from "mongoose";
 import { AuthenticatedAppContext } from "../types/AppContext";
+
 @Resolver(Post)
 export class PostResolver {
   @Mutation(() => Post)
@@ -114,6 +115,41 @@ export class PostResolver {
       }
       await postModel.findByIdAndUpdate(_id, { ...input }, { new: true });
       return "Post have been updated";
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Mutation(() => String)
+  @Authorized()
+  async likePost(
+    @Arg("id", () => String) id: String,
+    @Ctx() { userId }: AuthenticatedAppContext
+  ) {
+    try {
+      const existingPost = await postModel.findById(id);
+      if (!existingPost) {
+        throw new Error("Post does not exist");
+      }
+      if (existingPost?.likes?.find((id) => id == userId)) {
+        existingPost.likes = existingPost?.likes.filter((id) => id != userId);
+        await postModel.findByIdAndUpdate(
+          id,
+          { likes: existingPost?.likes },
+          { new: true }
+        );
+        return "Post have been unliked";
+      } else {
+        if (existingPost?.likes) {
+          existingPost?.likes.push(String(userId));
+        }
+        await postModel.findByIdAndUpdate(
+          id,
+          { likes: existingPost?.likes },
+          { new: true }
+        );
+        return "Post have been liked";
+      }
     } catch (error) {
       throw error;
     }

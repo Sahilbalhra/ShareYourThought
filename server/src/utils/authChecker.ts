@@ -9,9 +9,9 @@ export const authChecker: AuthChecker<AuthenticatedAppContext, AuthRoles> = ({
   try {
     const { authorization } = context.req.headers;
     if (!authorization) return false;
-    console.log("verify auth", authorization);
+    // console.log("verify auth", authorization);
     const { userId }: string | any = jwt.verify(authorization, "Secret_Key");
-    console.log("userId: ", userId);
+    // console.log("userId: ", userId);
     context.userId = userId;
     return true;
   } catch (error) {

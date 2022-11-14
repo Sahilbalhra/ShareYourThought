@@ -8,10 +8,15 @@ import {
   Button,
   IconButton,
   HStack,
+  useToast,
 } from "@chakra-ui/react";
 import React from "react";
 import { useAppDispatch } from "../../app/hook";
 import { formData, updateForm } from "../../features/form/fromSlice";
+import {
+  useDeletePostMutation,
+  useLikePostMutation,
+} from "../../graphql/generated";
 export type PostProps = {
   id: string;
   title: string;
@@ -30,6 +35,49 @@ const PostCard: React.FC<PostProps> = ({
   likes,
 }) => {
   const dispatch = useAppDispatch();
+  const toast = useToast();
+  const [deletePost, { loading, error }] = useDeletePostMutation();
+  const [likePost, { data: likeData }] = useLikePostMutation();
+  console.log("Data for like:", likeData);
+  const handleDelete = async () => {
+    await deletePost({
+      variables: {
+        id: id,
+      },
+    });
+    if (!error) {
+      toast({
+        title: "Post has been deleted",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+    if (error) {
+      toast({
+        title: "Cannot delete post",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
+  const handleLikeButton = async () => {
+    await likePost({
+      variables: {
+        id,
+      },
+    });
+    if (likeData) {
+      toast({
+        title: likeData.likePost,
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
   const handleClick = () => {
     dispatch(formData({ id, title, description, tags, picUrl }));
@@ -75,11 +123,16 @@ const PostCard: React.FC<PostProps> = ({
           {description.substring(0, 172)}...
         </Text>
         <Flex mt='1' justifyContent='space-between'>
-          <Button m={0} variant='solid'>
+          <Button m={0} variant='solid' onClick={handleLikeButton}>
             <AiOutlineLike />
             Like
           </Button>
-          <Button m={0} colorScheme='red'>
+          <Button
+            m={0}
+            colorScheme='red'
+            isLoading={loading}
+            onClick={handleDelete}
+          >
             <AiTwotoneDelete />
             Delete
           </Button>

@@ -10,20 +10,21 @@ import {
   Avatar,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../app/hook";
+import { useAppDispatch } from "../../app/hook";
 import { useGetUserQuery } from "../../graphql/generated/index";
 import { logOutUser } from "../../features/auth/authSlice";
 const NavBar: React.FC = () => {
   const navigate = useNavigate();
-  const token = useAppSelector((state) => state.auth.token);
+  const token = localStorage.getItem("token");
+  console.log(token);
   const dispatch = useAppDispatch();
-  const { data, error } = useGetUserQuery();
-  if (error) {
-    console.log("Authorized User Error:", data);
-  }
-  if (data) {
-    console.log("Authorized User:", data);
-  }
+  const { data } = useGetUserQuery();
+  // if (error) {
+  //   console.log("Authorized User Error:", data);
+  // }
+  // if (data) {
+  //   console.log("Authorized User:", data);
+  // }
 
   return (
     <Box

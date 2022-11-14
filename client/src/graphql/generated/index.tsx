@@ -35,6 +35,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createPost: Post;
   deletePost: Scalars['String'];
+  likePost: Scalars['String'];
   signInUser: SignInUserResponse;
   signUpUser: User;
   updatePost: Scalars['String'];
@@ -47,6 +48,11 @@ export type MutationCreatePostArgs = {
 
 
 export type MutationDeletePostArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationLikePostArgs = {
   id: Scalars['String'];
 };
 
@@ -151,6 +157,20 @@ export type CreatePostMutationVariables = Exact<{
 
 export type CreatePostMutation = { __typename?: 'Mutation', createPost: { __typename?: 'Post', _id: string, creatorId: string, title: string, tags?: Array<string> | null, picUrl: string, description: string, likes?: Array<string> | null, comments?: Array<string> | null, createdAt: any, updatedAt: any } };
 
+export type DeletePostMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type DeletePostMutation = { __typename?: 'Mutation', deletePost: string };
+
+export type LikePostMutationVariables = Exact<{
+  id: Scalars['String'];
+}>;
+
+
+export type LikePostMutation = { __typename?: 'Mutation', likePost: string };
+
 export type SignInUserMutationVariables = Exact<{
   input: SignInUserInput;
 }>;
@@ -243,6 +263,68 @@ export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
 export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
 export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
+export const DeletePostDocument = gql`
+    mutation DeletePost($id: String!) {
+  deletePost(id: $id)
+}
+    `;
+export type DeletePostMutationFn = Apollo.MutationFunction<DeletePostMutation, DeletePostMutationVariables>;
+
+/**
+ * __useDeletePostMutation__
+ *
+ * To run a mutation, you first call `useDeletePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePostMutation, { data, loading, error }] = useDeletePostMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<DeletePostMutation, DeletePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePostMutation, DeletePostMutationVariables>(DeletePostDocument, options);
+      }
+export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
+export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
+export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
+export const LikePostDocument = gql`
+    mutation LikePost($id: String!) {
+  likePost(id: $id)
+}
+    `;
+export type LikePostMutationFn = Apollo.MutationFunction<LikePostMutation, LikePostMutationVariables>;
+
+/**
+ * __useLikePostMutation__
+ *
+ * To run a mutation, you first call `useLikePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLikePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [likePostMutation, { data, loading, error }] = useLikePostMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useLikePostMutation(baseOptions?: Apollo.MutationHookOptions<LikePostMutation, LikePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LikePostMutation, LikePostMutationVariables>(LikePostDocument, options);
+      }
+export type LikePostMutationHookResult = ReturnType<typeof useLikePostMutation>;
+export type LikePostMutationResult = Apollo.MutationResult<LikePostMutation>;
+export type LikePostMutationOptions = Apollo.BaseMutationOptions<LikePostMutation, LikePostMutationVariables>;
 export const SignInUserDocument = gql`
     mutation SignInUser($input: signInUserInput!) {
   signInUser(input: $input) {
