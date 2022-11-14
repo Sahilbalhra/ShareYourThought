@@ -14,6 +14,7 @@ import React from "react";
 import { useAppDispatch } from "../../app/hook";
 import { formData, updateForm } from "../../features/form/fromSlice";
 import {
+  GetAllPostDocument,
   useDeletePostMutation,
   useLikePostMutation,
 } from "../../graphql/generated";
@@ -46,6 +47,7 @@ const PostCard: React.FC<PostProps> = ({
       variables: {
         id: id,
       },
+      refetchQueries: [{ query: GetAllPostDocument }],
     });
     if (!error) {
       toast({
@@ -70,6 +72,7 @@ const PostCard: React.FC<PostProps> = ({
       variables: {
         id,
       },
+      refetchQueries: [{ query: GetAllPostDocument }],
     });
     if (likeData) {
       toast({
@@ -101,7 +104,7 @@ const PostCard: React.FC<PostProps> = ({
         h='120px'
         w='240px'
         onClick={() => navigate(`/${id}`)}
-        cursor="pointer"
+        cursor='pointer'
       />
       <IconButton
         aria-label={""}

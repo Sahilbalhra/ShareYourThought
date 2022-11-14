@@ -3,9 +3,13 @@ import { Button, Box, Input, Text, Textarea, Center } from "@chakra-ui/react";
 import FileBase from "react-file-base64";
 import {
   useCreatePostMutation,
+  // useGetAllPostQuery,
   useUpdatePostMutation,
 } from "../../graphql/generated";
-import { CreatePostMutationVariables } from "../../graphql/generated/index";
+import {
+  CreatePostMutationVariables,
+  GetAllPostDocument,
+} from "../../graphql/generated/index";
 import { useAppSelector } from "../../app/hook";
 
 const PostForm: React.FC = () => {
@@ -69,19 +73,21 @@ const PostForm: React.FC = () => {
             picUrl: formData.picUrl,
           },
         },
+        refetchQueries: [{ query: GetAllPostDocument }],
       });
     } else {
       await createPost({
         variables: {
           input: { ...formData },
         },
+        refetchQueries: [{ query: GetAllPostDocument }],
       });
     }
 
     handleClear();
   };
   return (
-    <Center>
+    <Center p={4} boxShadow='2xl' rounded='lg' m={4}>
       {user ? (
         <Box as='form' onSubmit={handleSubmit} textAlign='center'>
           <Text mb='4' fontSize='xl' as='b'>
