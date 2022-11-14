@@ -6,6 +6,7 @@ export class UserInput {
   @Field() lastName!: string;
   @Field() email!: string;
   @Field() password!: string;
+  @Field() confirmPassword!: string;
 }
 
 @InputType()

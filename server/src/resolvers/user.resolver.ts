@@ -20,8 +20,10 @@ export class UserResolver {
   async signUpUser(
     @Arg("input", () => UserInput) input: UserInput
   ): Promise<User> {
-    const { firstName, lastName, email, password } = input;
-    console.log("input", input);
+    const { firstName, lastName, email, password, confirmPassword } = input;
+    if (password != confirmPassword) {
+      throw new Error("Password and Confirm Password must be the same");
+    }
     try {
       console.log("user input", input);
       const existingUser = await UserModel.findOne({ email });
@@ -46,6 +48,7 @@ export class UserResolver {
     @Arg("input", () => signInUserInput) input: signInUserInput
   ): Promise<SignInUserResponse> {
     const { email, password } = input;
+    // console.log("Input:",input)
     try {
       const existingUser = await UserModel.findOne({ email });
       if (!existingUser) {
@@ -57,6 +60,7 @@ export class UserResolver {
       const token = jwt.sign({ userId: existingUser?._id }, "Secret_Key", {
         expiresIn: "1h",
       });
+      // console.log("Token :",token)
       return { token };
     } catch (error) {
       throw error;

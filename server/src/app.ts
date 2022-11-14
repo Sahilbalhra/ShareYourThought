@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import express from "express";
+import bodyParser from "body-parser";
 import { buildSchema } from "type-graphql";
 import { GreetResolver, UserResolver } from "./resolvers/index";
 import { ApolloServer } from "apollo-server-express";
@@ -18,6 +19,8 @@ export const startApp = async () => {
 
   //Init express
   const app = express();
+  app.use(bodyParser.json({ limit: "30mb" }));
+  app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
   //create the apollo server
   const server = new ApolloServer({

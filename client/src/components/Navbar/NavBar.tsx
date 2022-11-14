@@ -1,8 +1,30 @@
 import React from "react";
-import { Box, Text, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Text,
+  Button,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Avatar,
+} from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../app/hook";
+import { useGetUserQuery } from "../../graphql/generated/index";
+import { logOutUser } from "../../features/auth/authSlice";
 const NavBar: React.FC = () => {
   const navigate = useNavigate();
+  const token = useAppSelector((state) => state.auth.token);
+  const dispatch = useAppDispatch();
+  const { data, error } = useGetUserQuery();
+  if (error) {
+    console.log("Authorized User Error:", data);
+  }
+  if (data) {
+    console.log("Authorized User:", data);
+  }
+
   return (
     <Box
       minW='2xl'
@@ -19,9 +41,21 @@ const NavBar: React.FC = () => {
         <Text as='b'>Share Your Thought</Text>
       </Box>
       <Box>
-        <Button variant='outline' onClick={() => navigate("/auth")}>
-          Login
-        </Button>
+        {!token ? (
+          <Button variant='outline' onClick={() => navigate("/auth")}>
+            Login
+          </Button>
+        ) : (
+          <Menu>
+            <MenuButton>
+              <Avatar src={data?.getUser.name} name={data?.getUser.name} />
+            </MenuButton>
+            <MenuList>
+              <MenuItem>{data?.getUser.name}</MenuItem>
+              <MenuItem onClick={() => dispatch(logOutUser())}>LogOut</MenuItem>
+            </MenuList>
+          </Menu>
+        )}
       </Box>
     </Box>
   );

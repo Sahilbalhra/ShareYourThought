@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Box, Input, Text, Textarea, Center } from "@chakra-ui/react";
 import FileBase from "react-file-base64";
-import { useCreatePostMutation } from "../../graphql/generated";
+import {
+  useCreatePostMutation,
+  useUpdatePostMutation,
+} from "../../graphql/generated";
 import { CreatePostMutationVariables } from "../../graphql/generated/index";
+import { useAppSelector } from "../../app/hook";
 
 const PostForm: React.FC = () => {
+  const form = useAppSelector((state) => state.from.updateForm);
+  const forms = useAppSelector((state) => state.from.formData);
+  // console.log("from Data:asdaskld ", forms);
   const [createPost, { data, error }] = useCreatePostMutation();
+  const [updatePost] = useUpdatePostMutation();
   // const toast = useToast();
   if (data) {
     console.log("Data:", data);
@@ -24,6 +32,15 @@ const PostForm: React.FC = () => {
     picUrl: "",
   });
 
+  useEffect(() => {
+    setFormData({
+      title: forms.title,
+      description: forms.description,
+      tags: forms.tags,
+      picUrl: forms.picUrl,
+    });
+  }, [forms]);
+
   const user = true;
 
   const handleChange = (e: any) => {
@@ -40,20 +57,36 @@ const PostForm: React.FC = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     console.log("Form Date:", formData);
-    await createPost({
-      variables: {
-        input: { ...formData },
-      },
-    });
+    if (form) {
+      console.log("from updATE FUNCTION");
+      await updatePost({
+        variables: {
+          input: {
+            _id: forms.id,
+            title: formData.title,
+            description: formData.description,
+            tags: formData.tags,
+            picUrl: formData.picUrl,
+          },
+        },
+      });
+    } else {
+      await createPost({
+        variables: {
+          input: { ...formData },
+        },
+      });
+    }
 
-    // handleClear();
+    handleClear();
   };
   return (
     <Center>
       {user ? (
         <Box as='form' onSubmit={handleSubmit} textAlign='center'>
           <Text mb='4' fontSize='xl' as='b'>
-            Create Your Memory
+            {form ? "Update" : "Create"}
+            Your Memory
           </Text>
           <Input
             type='text'
@@ -92,13 +125,13 @@ const PostForm: React.FC = () => {
             }
           />
           <Button w='full' mt={2} mb={2} colorScheme='pink' type='submit'>
-            Save
+            {form ? "Update" : "Save"}
           </Button>
           <Button
             w='full'
             colorScheme='purple'
             onClick={handleClear}
-            // isDisabled={currentId ? true : false}
+            isDisabled={form ? true : false}
           >
             Clear
           </Button>

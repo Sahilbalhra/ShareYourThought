@@ -1,0 +1,19 @@
+query GetPost($id:String!) {
+  getPost(id: $id) {
+    _id
+    creatorId
+    title
+    tags
+    picUrl
+    description
+    likes
+    comments
+    createdAt
+    updatedAt
+    User {
+      _id
+      name
+      email
+    }
+  }
+}

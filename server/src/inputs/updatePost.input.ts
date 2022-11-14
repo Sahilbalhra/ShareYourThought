@@ -8,5 +8,6 @@ export class UpdatePostInput {
   @Field({ nullable: true }) picUrl?: string;
   @Field({ nullable: true }) description?: string;
   @Field(() => [String], { nullable: true }) likes?: [string];
+  @Field(() => [String], { nullable: true }) tags?: [string];
   @Field(() => [String], { nullable: true }) comments?: [string];
 }

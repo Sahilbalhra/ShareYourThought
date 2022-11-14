@@ -3,7 +3,9 @@ import PostForm from "../../components/Forms/PostForm";
 import Posts from "../Posts/Posts";
 import { Grid, GridItem, useBreakpointValue } from "@chakra-ui/react";
 
+
 const Home: React.FC = () => {
+
   const isMobile = useBreakpointValue({ base: true, md: false });
   return (
     <Grid

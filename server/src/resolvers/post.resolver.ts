@@ -6,14 +6,13 @@ import { AuthenticatedAppContext } from "../types/AppContext";
 @Resolver(Post)
 export class PostResolver {
   @Mutation(() => Post)
-  // @Authorized()
+  @Authorized()
   async createPost(
     @Arg("input", () => PostInput) input: PostInput,
-    // @Ctx() { userId }: AuthenticatedAppContext
+    @Ctx() { userId }: AuthenticatedAppContext
   ): Promise<Post> {
-    const userId = "6367ced01c20af8a758835db"
-    const { title, description,tags, likes, comments,picUrl } = input;
-    console.log("imput",input)
+    // const userId = "6367ced01c20af8a758835db";
+    const { title, description, tags, likes, comments, picUrl } = input;
     try {
       const creatorId = userId;
       const post = await postModel.create({
@@ -57,13 +56,12 @@ export class PostResolver {
   }
 
   @Query(() => ExtendedPost)
-  async getPost(
-    @Arg("id", () => String) id: String | any
-  ): Promise<ExtendedPost> {
+  async getPost(@Arg("id", () => String) id: String): Promise<ExtendedPost> {
     try {
+      const _id = id + "";
       const post = await postModel.aggregate([
         {
-          $match: { _id: new mongoose.Types.ObjectId(id) },
+          $match: { _id: new mongoose.Types.ObjectId(_id) },
         },
         {
           $lookup: {
@@ -108,6 +106,7 @@ export class PostResolver {
     @Arg("input", () => UpdatePostInput) input: UpdatePostInput
   ): Promise<String> {
     const { _id } = input;
+    console.log("input:", input);
     try {
       const post = await postModel.findById(_id);
       if (!post) {
