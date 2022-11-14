@@ -88,6 +88,19 @@ const PostForm: React.FC = () => {
 
     handleClear();
   };
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    return (
+      <Center p={4} boxShadow='lg' rounded='lg' m={4} textAlign='center'>
+        <Text fontSize='xl' as='b' color='gray.400'>
+          {" "}
+          Please Sign In to create your own Post and like other's Posts
+        </Text>
+      </Center>
+    );
+  }
+
   return (
     <Center p={4} boxShadow='2xl' rounded='lg' m={4}>
       {user ? (
